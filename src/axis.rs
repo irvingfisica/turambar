@@ -1,5 +1,5 @@
 use svg::node::element::*;
-use crate::escalas::LinearScale;
+use crate::escalas::ContinuousScale;
 
 pub fn nicenum(x: f64, round: bool) -> f64 {
     let exp = x.log10().floor();
@@ -67,14 +67,14 @@ pub enum Direccion {
 }
 
 #[derive(Debug)]
-pub struct LinearAxis {
+pub struct Axis {
     pub eje: Line,
     pub ticks: Vec<Line>,
     pub tilab: Vec<Text>,
 }
 
-impl LinearAxis {
-    pub fn new(direccion: Direccion, escala: &LinearScale, nticks: usize, fsize: f64) -> Self {
+impl Axis {
+    pub fn new<T: ContinuousScale>(direccion: Direccion, escala: &T, nticks: usize, fsize: f64) -> Self {
 
         let mut axis = Line::new();
         let extent = escala.domain.extent();
@@ -205,7 +205,7 @@ impl LinearAxis {
             };
         };
 
-        LinearAxis {
+        Axis {
             eje: axis,
             ticks: ltic,
             tilab: tlab

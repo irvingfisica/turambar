@@ -1,6 +1,9 @@
 use turambar::svgplot;
+use turambar::escalas;
 
 use svgplot::Plot;
+use escalas::LinearScale;
+use escalas::ContinuousScale;
 use svg::node::element::*;
 
 
@@ -9,6 +12,11 @@ fn main() {
         plot.set_margin((0.0,0.0,0.0,0.0));
         let mut mg = plot.get_tgroup();
         let mut docu = plot.get_docu();
+
+        let mut scy = LinearScale::new();
+         scy.domain(0.0, 100.0).range(plot.ef_h(), 0.0);
+
+        println!("{:?}",scy.scale(50.0));
 
         let mut gc = Group::new()
             .set("class","circulos");

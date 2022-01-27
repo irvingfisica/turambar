@@ -1,5 +1,9 @@
 use std::collections::HashMap;
 
+pub trait ContinuousScale {
+    fn scale(&self, valor: f64) -> Option<f64>;
+}
+
 pub struct Interpolator {
     a: f64,
     b: f64,
@@ -55,8 +59,17 @@ impl LinearScale {
         self
     }
 
-    pub fn scale(&self, ve: f64) -> Option<f64> {
-        match self.domain.normalize(ve) {
+    // pub fn scale(&self, ve: f64) -> Option<f64> {
+    //     match self.domain.normalize(ve) {
+    //         Some(t) => Some(self.range.interpolate(t)),
+    //         None => None,
+    //     }
+    // }
+}
+
+impl ContinuousScale for LinearScale {
+    fn scale(&self, valor: f64) -> Option<f64> {
+        match self.domain.normalize(valor) {
             Some(t) => Some(self.range.interpolate(t)),
             None => None,
         }
