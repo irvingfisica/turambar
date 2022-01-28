@@ -77,7 +77,7 @@ impl Axis {
     pub fn new<T: ContinuousScale>(direccion: Direccion, escala: &T, nticks: usize, fsize: f64) -> Self {
 
         let mut axis = Line::new();
-        let extent = escala.domain.extent();
+        let extent = escala.extent();
         let ticks = loose_label(nticks, extent.0, extent.1);
         let mut fsist = fsize.to_string();
         fsist.push_str("px");

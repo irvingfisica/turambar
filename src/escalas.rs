@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 pub trait ContinuousScale {
     fn scale(&self, valor: f64) -> Option<f64>;
+    fn extent(&self) -> (f64,f64);
 }
 
 pub struct Interpolator {
@@ -73,6 +74,10 @@ impl ContinuousScale for LinearScale {
             Some(t) => Some(self.range.interpolate(t)),
             None => None,
         }
+    }
+
+    fn extent(&self) -> (f64,f64) {
+        self.domain.extent()
     }
 }
 
