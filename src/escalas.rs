@@ -59,13 +59,6 @@ impl LinearScale {
         self.range = Interpolator::new(a,b);
         self
     }
-
-    // pub fn scale(&self, ve: f64) -> Option<f64> {
-    //     match self.domain.normalize(ve) {
-    //         Some(t) => Some(self.range.interpolate(t)),
-    //         None => None,
-    //     }
-    // }
 }
 
 impl ContinuousScale for LinearScale {
@@ -78,6 +71,24 @@ impl ContinuousScale for LinearScale {
 
     fn extent(&self) -> (f64,f64) {
         self.domain.extent()
+    }
+}
+
+pub struct UnitScale;
+
+impl UnitScale {
+    pub fn new() -> Self {
+        UnitScale
+    }
+}
+
+impl ContinuousScale for UnitScale {
+    fn scale(&self, valor: f64) -> Option<f64> {
+        Some(valor)
+    }
+
+    fn extent(&self) -> (f64,f64) {
+        (0.0,0.0)
     }
 }
 
