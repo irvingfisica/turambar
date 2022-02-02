@@ -47,7 +47,11 @@ impl Rangos {
 
     pub fn fit(&self, alpha: f64, vpratio: f64) -> Rangos {
 
-        let ori = self.orientacion();
+        let mut ori = self.orientacion();
+
+        if self.ratio() < vpratio {
+            ori = ori.invert();
+        }
 
         let (og, os, rvp) = match ori {
             Orientacion::Vertical => {
@@ -104,6 +108,15 @@ pub enum Orientacion {
     Horizontal,
 }
 
+impl Orientacion {
+    pub fn invert(&self) -> Orientacion {
+        match self {
+            Orientacion::Horizontal => Orientacion::Vertical,
+            Orientacion::Vertical => Orientacion::Horizontal,
+        }
+    }
+}
+
 impl fmt::Display for Orientacion {
      fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -112,3 +125,4 @@ impl fmt::Display for Orientacion {
         }
      }
 }
+
