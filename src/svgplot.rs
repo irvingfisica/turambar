@@ -4,8 +4,8 @@ use svg::node::element::*;
 use crate::transforms::get_translation;
 
 pub struct Plot {
-    width: f64,
-    height: f64,
+    pub width: f64,
+    pub height: f64,
     top: f64,
     bottom: f64,
     left: f64,
@@ -48,6 +48,10 @@ impl Plot {
 
     pub fn ef_h(&self) -> f64 {
         self.height - self.top - self.bottom
+    }
+
+    pub fn ef_r(&self) -> f64 {
+        self.ef_w()/self.ef_h()
     }
 
     pub fn get_tgroup(&self) -> Group {
