@@ -1,4 +1,6 @@
 use std::fmt;
+use geo_types::Rect;
+use geo_types::Coordinate;
 
 pub struct Rangos {
     pub xmin: f64,
@@ -45,6 +47,14 @@ impl Rangos {
         }
     }
 
+    pub fn get_bounding(&self) -> Rect<f64> {
+
+        let upper = Coordinate {x: self.xmin, y: self.ymin};
+        let lower = Coordinate {x: self.xmax, y: self.ymax};
+
+        Rect::new(upper, lower)
+    }
+
     pub fn fit(&self, alpha: f64, vpratio: f64) -> Rangos {
 
         let mut ori = self.orientacion();
@@ -74,8 +84,6 @@ impl Rangos {
 
         let eg = og * (1.0 - alpha) / alpha;
         let es = os * (1.0 - beta) / beta;
-
-        println!("eg: {}, es: {}, beta: {}", eg, es, beta);
 
         let (xminp,xmaxp,yminp,ymaxp) = match ori {
             Orientacion::Vertical => {
