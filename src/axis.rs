@@ -41,12 +41,15 @@ pub fn loose_label(ntick:usize, min:f64, max:f64) -> Vec<Tick> {
     let mut x = graphmin;
     let mut salida = Vec::new();
     while x < (graphmax + 0.5*d) {
-        let etiqueta = format!("{:.*}",nfrac,x);
-        let tick = Tick {
-            valor: x,
-            label: etiqueta,
-        };
-        salida.push(tick);
+        if (x >= min) && (x <= max) {
+            let etiqueta = format!("{:.*}",nfrac,x);
+            let tick = Tick {
+                valor: x,
+                label: etiqueta,
+            };
+        
+            salida.push(tick);
+        }
         x = x + d;
     };
 
