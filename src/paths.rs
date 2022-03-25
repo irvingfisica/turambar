@@ -120,7 +120,7 @@ pub fn points_from_linestring(line: &geo::LineString<f64>) -> Vec<(f64,f64)> {
     
     let mut salida = Vec::new();
     
-    for point in line.points_iter() {
+    for point in line.points() {
         salida.push(point.x_y())
     };
 
