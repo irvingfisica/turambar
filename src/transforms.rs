@@ -11,6 +11,26 @@ pub fn get_translation(x: f64, y: f64) -> String {
     trans
 }
 
+pub fn get_rotation(angle: f64) -> String {
+    let mut trans = "rotate(".to_string();
+            trans.push_str(&(angle.to_string()));
+            trans.push_str(")");
+
+    trans
+}
+
+pub fn get_anchored_rotation(angle: f64, x: f64, y: f64) -> String {
+    let mut trans = "rotate(".to_string();
+            trans.push_str(&(angle.to_string()));
+            trans.push_str(" ");
+            trans.push_str(&(x.to_string()));
+            trans.push_str(" ");
+            trans.push_str(&(y.to_string()));
+            trans.push_str(")");
+
+    trans
+}
+
 pub fn to_pxs(size: f64) -> String {
     let mut cadena = size.to_string();
     cadena.push_str("px");

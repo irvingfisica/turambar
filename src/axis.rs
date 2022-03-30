@@ -80,133 +80,140 @@ impl Axis {
     pub fn new<T: ContinuousScale>(direccion: Direccion, escala: &T, nticks: usize, fsize: f64) -> Self {
 
         let mut axis = Line::new();
-        let extent = escala.extent();
-        let ticks = loose_label(nticks, extent.0, extent.1);
-        let mut fsist = fsize.to_string();
-        fsist.push_str("px");
-
-        match direccion {
-            Direccion::Top => {
-                axis = axis.set("x1",escala.scale(extent.0).unwrap())
-                            .set("y1",0.0)
-                            .set("x2",escala.scale(extent.1).unwrap())
-                            .set("y2",0.0);
-            },
-            Direccion::Bottom => {
-                axis = axis.set("x1",escala.scale(extent.0).unwrap())
-                            .set("y1",0.0)
-                            .set("x2",escala.scale(extent.1).unwrap())
-                            .set("y2",0.0);
-            },
-            Direccion::Left => {
-                axis = axis.set("x1",0.0)
-                            .set("y1",escala.scale(extent.0).unwrap())
-                            .set("x2",0.0)
-                            .set("y2",escala.scale(extent.1).unwrap());
-            },
-            Direccion::Right => {
-                axis = axis.set("x1",0.0)
-                            .set("y1",escala.scale(extent.0).unwrap())
-                            .set("x2",0.0)
-                            .set("y2",escala.scale(extent.1).unwrap());
-            }
-        };
-
-        axis = axis.set("stroke","black")
-                    .set("stroke-width",0.5);
-
         let mut ltic = Vec::new();
         let mut tlab = Vec::new();
 
-        for tick in ticks.iter() {
-            if tick.valor < extent.1 {
+        let extent = escala.extent();
+
+        match (escala.scale(extent.0),escala.scale(extent.1)) {
+            (Some(e0),Some(e1)) => {
+                
+                let ticks = loose_label(nticks, extent.0, extent.1);
+                let mut fsist = fsize.to_string();
+                fsist.push_str("px");
 
                 match direccion {
                     Direccion::Top => {
-                        let ticko = Line::new()
-                                    .set("x1", escala.scale(tick.valor).unwrap())
-                                    .set("y1", -2.0)
-                                    .set("x2", escala.scale(tick.valor).unwrap())
-                                    .set("y2", 2.0)
-                                    .set("stroke","black")
-                                    .set("stroke-width", 0.5);
-
-                        ltic.push(ticko);
-
-                        let label = Text::new()
-                                    .set("x", escala.scale(tick.valor).unwrap())
-                                    .set("y", -4.5)
-                                    .set("text-anchor","middle")
-                                    .set("font-size",fsist.to_string())
-                                    .add(svg::node::Text::new(tick.label.to_string()));
-
-                        tlab.push(label);
+                        axis = axis.set("x1",e0)
+                                    .set("y1",0.0)
+                                    .set("x2",e1)
+                                    .set("y2",0.0);
                     },
                     Direccion::Bottom => {
-                        let ticko = Line::new()
-                                    .set("x1", escala.scale(tick.valor).unwrap())
-                                    .set("y1", -2.0)
-                                    .set("x2", escala.scale(tick.valor).unwrap())
-                                    .set("y2", 2.0)
-                                    .set("stroke","black")
-                                    .set("stroke-width", 0.5);
-
-                        ltic.push(ticko);
-
-                        let label = Text::new()
-                                    .set("x", escala.scale(tick.valor).unwrap())
-                                    .set("y", 4.5)
-                                    .set("text-anchor","middle")
-                                    .set("dominant-baseline","hanging")
-                                    .set("font-size",fsist.to_string())
-                                    .add(svg::node::Text::new(tick.label.to_string()));
-
-                        tlab.push(label);
+                        axis = axis.set("x1",e0)
+                                    .set("y1",0.0)
+                                    .set("x2",e1)
+                                    .set("y2",0.0);
                     },
                     Direccion::Left => {
-                        let ticko = Line::new()
-                                    .set("y1", escala.scale(tick.valor).unwrap())
-                                    .set("x1", -2.0)
-                                    .set("y2", escala.scale(tick.valor).unwrap())
-                                    .set("x2", 2.0)
-                                    .set("stroke","black")
-                                    .set("stroke-width", 0.5);
-
-                        ltic.push(ticko);
-
-                        let label = Text::new()
-                                    .set("y", escala.scale(tick.valor).unwrap())
-                                    .set("x", -4.5)
-                                    .set("text-anchor","end")
-                                    .set("dominant-baseline","middle")
-                                    .set("font-size",fsist.to_string())
-                                    .add(svg::node::Text::new(tick.label.to_string()));
-
-                        tlab.push(label);
+                        axis = axis.set("x1",0.0)
+                                    .set("y1",e0)
+                                    .set("x2",0.0)
+                                    .set("y2",e1);
                     },
                     Direccion::Right => {
-                        let ticko = Line::new()
-                                    .set("y1", escala.scale(tick.valor).unwrap())
-                                    .set("x1", -2.0)
-                                    .set("y2", escala.scale(tick.valor).unwrap())
-                                    .set("x2", 2.0)
-                                    .set("stroke","black")
-                                    .set("stroke-width", 0.5);
+                        axis = axis.set("x1",0.0)
+                                    .set("y1",e0)
+                                    .set("x2",0.0)
+                                    .set("y2",e1);
+                    }
+                };
 
-                        ltic.push(ticko);
+                axis = axis.set("stroke","black")
+                            .set("stroke-width",0.5);
 
-                        let label = Text::new()
-                                    .set("y", escala.scale(tick.valor).unwrap())
-                                    .set("x", 4.5)
-                                    .set("dominant-baseline","middle")
-                                    .set("font-size",fsist.to_string())
-                                    .add(svg::node::Text::new(tick.label.to_string()));
+                for tick in ticks.iter() {
+                    if tick.valor < extent.1 {
 
-                        tlab.push(label);
-                    },
-                }
-            };
-        };
+                        match direccion {
+                            Direccion::Top => {
+                                let ticko = Line::new()
+                                            .set("x1", escala.scale(tick.valor).unwrap())
+                                            .set("y1", -2.0)
+                                            .set("x2", escala.scale(tick.valor).unwrap())
+                                            .set("y2", 2.0)
+                                            .set("stroke","black")
+                                            .set("stroke-width", 0.5);
+
+                                ltic.push(ticko);
+
+                                let label = Text::new()
+                                            .set("x", escala.scale(tick.valor).unwrap())
+                                            .set("y", -4.5)
+                                            .set("text-anchor","middle")
+                                            .set("font-size",fsist.to_string())
+                                            .add(svg::node::Text::new(tick.label.to_string()));
+
+                                tlab.push(label);
+                            },
+                            Direccion::Bottom => {
+                                let ticko = Line::new()
+                                            .set("x1", escala.scale(tick.valor).unwrap())
+                                            .set("y1", -2.0)
+                                            .set("x2", escala.scale(tick.valor).unwrap())
+                                            .set("y2", 2.0)
+                                            .set("stroke","black")
+                                            .set("stroke-width", 0.5);
+
+                                ltic.push(ticko);
+
+                                let label = Text::new()
+                                            .set("x", escala.scale(tick.valor).unwrap())
+                                            .set("y", 4.5)
+                                            .set("text-anchor","middle")
+                                            .set("dominant-baseline","hanging")
+                                            .set("font-size",fsist.to_string())
+                                            .add(svg::node::Text::new(tick.label.to_string()));
+
+                                tlab.push(label);
+                            },
+                            Direccion::Left => {
+                                let ticko = Line::new()
+                                            .set("y1", escala.scale(tick.valor).unwrap())
+                                            .set("x1", -2.0)
+                                            .set("y2", escala.scale(tick.valor).unwrap())
+                                            .set("x2", 2.0)
+                                            .set("stroke","black")
+                                            .set("stroke-width", 0.5);
+
+                                ltic.push(ticko);
+
+                                let label = Text::new()
+                                            .set("y", escala.scale(tick.valor).unwrap())
+                                            .set("x", -4.5)
+                                            .set("text-anchor","end")
+                                            .set("dominant-baseline","middle")
+                                            .set("font-size",fsist.to_string())
+                                            .add(svg::node::Text::new(tick.label.to_string()));
+
+                                tlab.push(label);
+                            },
+                            Direccion::Right => {
+                                let ticko = Line::new()
+                                            .set("y1", escala.scale(tick.valor).unwrap())
+                                            .set("x1", -2.0)
+                                            .set("y2", escala.scale(tick.valor).unwrap())
+                                            .set("x2", 2.0)
+                                            .set("stroke","black")
+                                            .set("stroke-width", 0.5);
+
+                                ltic.push(ticko);
+
+                                let label = Text::new()
+                                            .set("y", escala.scale(tick.valor).unwrap())
+                                            .set("x", 4.5)
+                                            .set("dominant-baseline","middle")
+                                            .set("font-size",fsist.to_string())
+                                            .add(svg::node::Text::new(tick.label.to_string()));
+
+                                tlab.push(label);
+                            },
+                        }
+                    };
+                };
+            },
+            _ => {}
+        }
 
         Axis {
             eje: axis,
